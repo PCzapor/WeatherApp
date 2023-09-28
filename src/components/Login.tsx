@@ -3,8 +3,6 @@ import { toast } from "react-hot-toast";
 import { Storage } from "../helpers/storage";
 import { useNavigate } from "react-router-dom";
 
-const userCredentials = { username: "admin", password: "admin" };
-
 const Login: React.FC = () => {
   const [error, setError] = useState<string>("");
   const [credentials, setCredentials] = useState({
@@ -24,8 +22,6 @@ const Login: React.FC = () => {
       toast.error("Wystąpił błąd logowania");
     }
     //autentykacja powinna nastapić z backendu
-    //await axios.post('/auth/login',credentials)
-    //na potrzeby projektu interwiew credential przypisane na sztywno
   };
   return (
     <div

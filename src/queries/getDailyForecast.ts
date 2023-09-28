@@ -19,7 +19,7 @@ export const useDailyForecast = (cityName: string) =>
     async () => await fetchDailyForecast(cityName),
     {
       enabled: !!cityName,
-      // refetchInterval: 1000 * 60,
+      refetchInterval: 1000 * 60,
       refetchOnWindowFocus: false,
     }
   );
