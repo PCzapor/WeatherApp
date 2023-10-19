@@ -10,16 +10,16 @@ type Props = {
 
 const CurrentWeather: React.FC<Props> = ({ cityName }) => {
   const { data: CityData, isLoading } = useDailyForecast(cityName);
-
   if (isLoading) return <>Loading..</>;
   if (!CityData)
     return (
       <>There is no data to display, please add some cities to favorites</>
     );
+  
   const iconCode = CityData.weather[0].icon;
   const iconUrl = `https://openweathermap.org/img/wn/${iconCode}.png`;
   const weekDay = moment(CityData.dt * 1000).isoWeekday();
-
+  
   return (
     <div className="d-flex flex-column w-100 justify-content-center">
       <div className="d-flex justify-content-center">

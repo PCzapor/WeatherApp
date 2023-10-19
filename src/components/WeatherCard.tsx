@@ -1,38 +1,37 @@
 import React from "react";
-import { useDailyForecast } from "../queries/getDailyForecast";
+import { useGlobalContext } from "..";
 import { Storage } from "../helpers/storage";
+import { useDailyForecast } from "../queries/getDailyForecast";
 type Props = {
   handleRemoveFavorite: (cityName: string) => void;
   cityName: string;
   handleActive: (cityName: string) => void;
-  active: string;
 };
 
 const WeatherCard: React.FC<Props> = ({
   cityName,
-  active,
   handleRemoveFavorite,
   handleActive,
 }) => {
   const { data: CityData, isLoading } = useDailyForecast(cityName);
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
+  const {active}=useGlobalContext()
   if (!CityData) return null;
-
+  
   const { weather } = CityData;
   const weatherDescription = weather[0].description;
   const iconCode = weather[0].icon;
   const iconUrl = `https://openweathermap.org/img/wn/${iconCode}.png`;
-
+  
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
   return (
     <div
-      className={
-        CityData.name === active
+    className={
+      CityData.name === active
           ? `card px-1 mx-1 rounded-lg bg-primary`
           : `card px-1 mx-1 rounded-lg`
-      }
+        }
       style={{
         maxHeight: "250px",
         minHeight: "250px",
@@ -44,7 +43,7 @@ const WeatherCard: React.FC<Props> = ({
         Storage.setActiveCity(cityName);
         handleActive(cityName);
       }}
-    >
+      >
       <button
         onClick={(e) => {
           e.stopPropagation();

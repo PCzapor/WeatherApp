@@ -1,10 +1,13 @@
-import React, { useEffect, useState } from "react";
-import Search from "./Search";
-import UserRow from "./UserRow";
-import CurrentWeather from "./CurrentWeather";
-import WeatherCardCarousel from "./WeatherCardCarousel";
+import { useEffect, useState } from "react";
+import { MyGlobalContext } from "..";
 import { Storage } from "../helpers/storage";
+import CurrentWeather from "./CurrentWeather";
+import Search from "./Search";
+import { UserRow } from "./UserRow";
+import WeatherCardCarousel from "./WeatherCardCarousel";
 import WeatherWeek from "./WeatherWeek";
+
+
 
 const Dashboard = () => {
   const [favorites, setFavorites] = useState<string[]>([]);
@@ -12,14 +15,12 @@ const Dashboard = () => {
   useEffect(() => {
     const storedFavorites = Storage.getFavorites();
     if (!storedFavorites) return;
-    if (storedFavorites) {
-      setFavorites(storedFavorites);
-    }
-
+    
     if (storedFavorites.length > 0 && !active) {
+      setFavorites(storedFavorites);
       setActive(storedFavorites[0]);
     }
-  }, [active]);
+  }, []);
   const handleActive = (cityName: string) => {
     if (favorites.length === 1) return setActive(favorites[0]);
     setActive(cityName);
@@ -35,6 +36,7 @@ const Dashboard = () => {
   const city = Storage.getActiveCity();
 
   return (
+    <MyGlobalContext.Provider value={{favorites,active}}>
     <main className="container px-0 h-100 w-100 d-flex align-items-center  justify-content-center">
       <div
         style={{ height: "85%", backgroundColor: "lightgreen" }}
@@ -46,7 +48,7 @@ const Dashboard = () => {
               <Search />
             </div>
             <div className="row display-4 mb-4">
-              Weather <b> Forecast</b>
+              Weather <strong> Forecast</strong>
             </div>
           </div>
           <div className="col-5">
@@ -58,26 +60,23 @@ const Dashboard = () => {
             <WeatherCardCarousel
               handleActive={handleActive}
               handleAddFavorite={handleAddFavorite}
-              favorites={favorites}
               handleRemoveFavorite={handleRemoveFavorite}
-              active={active}
-            />
+              />
           </div>
           <div className="col-5 w-100">
             {!city ? (
               <div>Add first city to your favorites </div>
-            ) : (
-              <>
+              ) : (
                 <CurrentWeather cityName={active} />
-              </>
-            )}
+                )}
           </div>
         </div>
         <div className="row justify-content-center ml-0 w-100 mb-4">
-          <WeatherWeek active={active} />
+          <WeatherWeek  />
         </div>
       </div>
     </main>
+   </MyGlobalContext.Provider>
   );
 };
 

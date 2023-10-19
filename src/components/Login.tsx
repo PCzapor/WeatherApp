@@ -1,20 +1,29 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { toast } from "react-hot-toast";
-import { Storage } from "../helpers/storage";
 import { useNavigate } from "react-router-dom";
+import { selectActiveCity, selectFavorites } from "../helpers/citySlice";
+import { login, selectLoggedUser } from "../helpers/userSlice";
+import { Storage } from "../helpers/storage";
+import { useDispatch, useSelector } from "react-redux";
 
-const Login: React.FC = () => {
-  const [error, setError] = useState<string>("");
+const Login = () => {
+  const [error, setError] = useState("");
   const [credentials, setCredentials] = useState({
     username: "",
     password: "",
-    rememberMe: false,
   });
 
+
+  const dispach = useDispatch();
+  const loggedUser = useSelector(selectLoggedUser)
+  const activeCity = useSelector(selectActiveCity)
+  const favorites = useSelector(selectFavorites)
+  
   const navigate = useNavigate();
   const handleLogin = async () => {
     try {
-      Storage.LogIn(credentials.username, credentials.password);
+      dispach(login({login:credentials.username, password:credentials.password}))
+      // Storage.LogIn(credentials.username, credentials.password);
       toast.success("Zalogowano");
       navigate("/dashboard");
     } catch (e) {

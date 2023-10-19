@@ -13,6 +13,7 @@ const FavoritesAdd: React.FC<Props> = ({ handleAddFavorite }) => {
   };
 
   const handleAdd = () => {
+    if(newCity.length === 0)return
     const capitalizedCity = capitalizeFirstLetter(newCity);
     handleAddFavorite(capitalizedCity);
     Storage.addFavorite(capitalizedCity);

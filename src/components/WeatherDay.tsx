@@ -24,13 +24,13 @@ const WeatherDay: React.FC<Props> = ({
   date,
 }) => {
   const { data: CityData, isLoading } = useDailyForecast(cityName);
-  if (isLoading || !CityData) return <div>Loading..</div>;
-
+  
   const iconUrl = `https://openweathermap.org/img/wn/${iconCode}.png`;
-
+  
   const lowesTemp = kelvinToCelsius(temp_min);
   const highestTemp = kelvinToCelsius(temp_max);
-
+  
+  if (isLoading || !CityData) return <div>Loading..</div>;
   return (
     <>
       <div className="row justify-content-between w-100 align-items-center">

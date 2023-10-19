@@ -1,24 +1,41 @@
 import React, { useState } from "react";
-import WeatherCard from "./WeatherCard";
-import FavoritesAdd from "./FavoritesAdd";
+import { useGlobalContext } from "..";
 import { Storage } from "../helpers/storage";
+import FavoritesAdd from "./FavoritesAdd";
+import WeatherCard from "./WeatherCard";
 type Props = {
   handleRemoveFavorite: (cityName: string) => void;
   handleAddFavorite: (cityName: string) => void;
   handleActive: (cityName: string) => void;
-  favorites: string[];
-  active: string;
 };
 const WeatherCardCarousel: React.FC<Props> = ({
-  favorites,
-  active,
+  
+
   handleAddFavorite,
   handleActive,
   handleRemoveFavorite,
 }) => {
   const [start, setStart] = useState(0);
   const [end, setEnd] = useState(3);
+  const {favorites}=useGlobalContext()
 
+  if (favorites.length > 0) {
+    Storage.setActiveCity(favorites[0]);
+  }
+  const incrementStart = () => {
+    if (start < favorites.length - 1) {
+      setStart(start + 1);
+      setEnd(end + 1);
+    }
+  };
+  
+  const decrementStart = () => {
+    if (start > 0) {
+      setStart(start - 1);
+      setEnd(end - 1);
+    }
+  };
+  
   if (!favorites)
     return (
       <>
@@ -35,23 +52,6 @@ const WeatherCardCarousel: React.FC<Props> = ({
         <FavoritesAdd handleAddFavorite={handleAddFavorite} />
       </>
     );
-  if (favorites.length > 0) {
-    Storage.setActiveCity(favorites[0]);
-  }
-  const incrementStart = () => {
-    if (start < favorites.length - 1) {
-      setStart(start + 1);
-      setEnd(end + 1);
-    }
-  };
-
-  const decrementStart = () => {
-    if (start > 0) {
-      setStart(start - 1);
-      setEnd(end - 1);
-    }
-  };
-
   return (
     <div className="d-flex">
       {favorites && favorites.length > 3 ? (
@@ -65,7 +65,7 @@ const WeatherCardCarousel: React.FC<Props> = ({
             onClick={decrementStart}
             disabled={start === 0}
           >
-            {"<"}
+            &larr;
           </button>
 
           {favorites.slice(start, end).map((name, idx) => {
@@ -75,7 +75,7 @@ const WeatherCardCarousel: React.FC<Props> = ({
                 handleRemoveFavorite={handleRemoveFavorite}
                 cityName={name}
                 handleActive={handleActive}
-                active={active}
+               
               />
             );
           })}
@@ -89,7 +89,7 @@ const WeatherCardCarousel: React.FC<Props> = ({
             onClick={incrementStart}
             disabled={end >= favorites.length}
           >
-            {">"}
+            &rarr;
           </button>
         </>
       ) : (
@@ -102,7 +102,7 @@ const WeatherCardCarousel: React.FC<Props> = ({
                     handleRemoveFavorite={handleRemoveFavorite}
                     cityName={name}
                     handleActive={handleActive}
-                    active={active}
+                    
                   />
                 );
               })

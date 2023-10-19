@@ -51,7 +51,7 @@ export class Storage {
     return favorites ? JSON.parse(favorites) : null;
   }
 
-  static async addFavorite(cityName: string) {
+  static async addFavorite(cityName: string):Promise<void> {
     const user = Storage.getLoggedUser();
     const key = `${StorageKeys.Favorites}_${user.login}`;
     const existingObject = localStorage.getItem(key);
@@ -66,30 +66,26 @@ export class Storage {
         return localStorage.setItem(key, JSON.stringify(value));
       }
 
-      const newExistingObject: string[] = JSON.parse(existingObject);
+      const newExistingObject: string[] = existingObject? JSON.parse(existingObject): [];
 
-      if (newExistingObject.includes(cityName)) return;
-
-      newExistingObject.push(cityName);
-
-      return localStorage.setItem(key, JSON.stringify(newExistingObject));
+      if (!newExistingObject.includes(cityName)) {
+        newExistingObject.push(cityName); 
+       localStorage.setItem(key, JSON.stringify(newExistingObject));
+      }
+      
     } catch (error) {
       console.error("Error adding city:", error);
     }
   }
-  static removeFavorite(cityName: string) {
+  static removeFavorite(cityName: string):void {
     const user = Storage.getLoggedUser();
     const key = `${StorageKeys.Favorites}_${user.login}`;
     const existingObject = localStorage.getItem(key);
 
     if (!existingObject) return;
 
-    const newExistingObject: string[] = JSON.parse(existingObject);
+    const newExistingObject: string[] =  JSON.parse(existingObject).filter((e:string)=>e!==cityName)
 
-    if (!newExistingObject.includes(cityName)) return;
-
-    const _array = newExistingObject.filter((e) => e !== cityName);
-
-    return localStorage.setItem(key, JSON.stringify(_array));
+    return localStorage.setItem(key, JSON.stringify(newExistingObject));
   }
 }
