@@ -1,5 +1,6 @@
 import React, { useState } from "react";
-import { Storage } from "../helpers/storage";
+import { useDispatch } from "react-redux";
+import { selectFavorites } from "helpers/citySlice";
 
 type Props = {
   handleAddFavorite: (cityName: string) => void;
@@ -7,17 +8,17 @@ type Props = {
 
 const FavoritesAdd: React.FC<Props> = ({ handleAddFavorite }) => {
   const [newCity, setNewCity] = useState("");
+  const dispatch = useDispatch();
 
   const capitalizeFirstLetter = (str: string) => {
     return str.charAt(0).toUpperCase() + str.slice(1);
   };
 
   const handleAdd = () => {
-    if(newCity.length === 0)return
+    if (newCity.length === 0) return;
     const capitalizedCity = capitalizeFirstLetter(newCity);
     handleAddFavorite(capitalizedCity);
-    Storage.addFavorite(capitalizedCity);
-
+    dispatch(selectFavorites(capitalizedCity));
     setNewCity("");
   };
 

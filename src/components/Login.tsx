@@ -1,10 +1,8 @@
 import { useState } from "react";
 import { toast } from "react-hot-toast";
-import { useNavigate } from "react-router-dom";
-import { selectActiveCity, selectFavorites } from "../helpers/citySlice";
-import { login, selectLoggedUser } from "../helpers/userSlice";
-import { Storage } from "../helpers/storage";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { login, selectLoggedUser } from "../helpers/userSlice";
 
 const Login = () => {
   const [error, setError] = useState("");
@@ -13,19 +11,27 @@ const Login = () => {
     password: "",
   });
 
-
   const dispach = useDispatch();
-  const loggedUser = useSelector(selectLoggedUser)
-  const activeCity = useSelector(selectActiveCity)
-  const favorites = useSelector(selectFavorites)
-  
+  const loggedUser = useSelector(selectLoggedUser);
+
   const navigate = useNavigate();
   const handleLogin = async () => {
     try {
-      dispach(login({login:credentials.username, password:credentials.password}))
-      // Storage.LogIn(credentials.username, credentials.password);
-      toast.success("Zalogowano");
-      navigate("/dashboard");
+      if (
+        credentials.username === "admin" &&
+        credentials.password === "admin"
+      ) {
+        dispach(
+          login({ login: credentials.username, password: credentials.password })
+        );
+
+        toast.success("Zalogowano");
+        if (loggedUser) {
+          navigate("/dashboard");
+        }
+      } else {
+        throw "Invalid credentials";
+      }
     } catch (e) {
       setError(String(e));
       toast.error("Wystąpił błąd logowania");

@@ -1,5 +1,5 @@
 import axios from "axios";
-import { CityDataResponse } from "src/types";
+import { CityDataResponse } from "types";
 
 export const fetchCityData = async (cityName: string | null) => {
   const apiKey = process.env.REACT_APP_API_KEY || "place_your_api_key_here";

@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
+import { setActive } from "helpers/citySlice";
 import { useGlobalContext } from "..";
-import { Storage } from "../helpers/storage";
 import FavoritesAdd from "./FavoritesAdd";
 import WeatherCard from "./WeatherCard";
 type Props = {
@@ -9,34 +10,35 @@ type Props = {
   handleActive: (cityName: string) => void;
 };
 const WeatherCardCarousel: React.FC<Props> = ({
-  
-
   handleAddFavorite,
   handleActive,
   handleRemoveFavorite,
 }) => {
   const [start, setStart] = useState(0);
   const [end, setEnd] = useState(3);
-  const {favorites}=useGlobalContext()
+  const { favorites } = useGlobalContext();
+  const dispatch = useDispatch();
 
-  if (favorites.length > 0) {
-    Storage.setActiveCity(favorites[0]);
-  }
+  useEffect(() => {
+    if (favorites.length > 0) {
+      dispatch(setActive(favorites[0]));
+    }
+  }, [dispatch, favorites]);
   const incrementStart = () => {
     if (start < favorites.length - 1) {
       setStart(start + 1);
       setEnd(end + 1);
     }
   };
-  
+
   const decrementStart = () => {
     if (start > 0) {
       setStart(start - 1);
       setEnd(end - 1);
     }
   };
-  
-  if (!favorites)
+
+  if (!favorites) {
     return (
       <>
         add cities to favorites
@@ -52,6 +54,7 @@ const WeatherCardCarousel: React.FC<Props> = ({
         <FavoritesAdd handleAddFavorite={handleAddFavorite} />
       </>
     );
+  }
   return (
     <div className="d-flex">
       {favorites && favorites.length > 3 ? (
@@ -75,7 +78,6 @@ const WeatherCardCarousel: React.FC<Props> = ({
                 handleRemoveFavorite={handleRemoveFavorite}
                 cityName={name}
                 handleActive={handleActive}
-               
               />
             );
           })}
@@ -102,7 +104,6 @@ const WeatherCardCarousel: React.FC<Props> = ({
                     handleRemoveFavorite={handleRemoveFavorite}
                     cityName={name}
                     handleActive={handleActive}
-                    
                   />
                 );
               })

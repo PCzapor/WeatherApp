@@ -1,4 +1,5 @@
-import { Storage } from "../helpers/storage";
+import { useDispatch } from "react-redux";
+import { logout } from "helpers/userSlice";
 
 const UserNotofication = () => {
   return (
@@ -9,6 +10,8 @@ const UserNotofication = () => {
 };
 
 const UserPanel = () => {
+  const dispatch = useDispatch();
+
   return (
     <div className="dropdown">
       <img
@@ -18,12 +21,12 @@ const UserPanel = () => {
         style={{ width: "64px", height: "64px", cursor: "pointer" }}
         id="user-avatar"
         data-toggle="dropdown"
-        />
+      />
       <div
         className="dropdown-menu dropdown-menu-right"
         aria-labelledby="user-avatar"
-        >
-        <a onClick={Storage.logOut} className="dropdown-item" href="/">
+      >
+        <a onClick={() => dispatch(logout)} className="dropdown-item" href="/">
           Logout
         </a>
       </div>

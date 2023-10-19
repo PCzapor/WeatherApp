@@ -9,33 +9,32 @@ import reportWebVitals from "./reportWebVitals";
 import { Provider } from "react-redux";
 import store from "./helpers/sliceStore";
 
-export type GlobalContent ={
-  favorites:string[];
-  active:string;
-}
+export type GlobalContent = {
+  favorites: string[];
+  active: string;
+};
 
 export const MyGlobalContext = createContext<GlobalContent>({
-  favorites:[],
-  active:'',
-})
+  favorites: [],
+  active: "",
+});
 
-export const useGlobalContext= ()=> useContext(MyGlobalContext)
+export const useGlobalContext = (): GlobalContent =>
+  useContext(MyGlobalContext);
 const client = new QueryClient();
-
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 root.render(
   <Provider store={store}>
-  <QueryClientProvider client={client}>
-    <Toaster />
-    <BrowserRouter>
-      <App />
-    </BrowserRouter>
-  </QueryClientProvider>
+    <QueryClientProvider client={client}>
+      <Toaster />
+      <BrowserRouter>
+        <App />
+      </BrowserRouter>
+    </QueryClientProvider>
   </Provider>
 );
-
 
 reportWebVitals();

@@ -1,8 +1,7 @@
-import axios from "axios";
 import moment from "moment";
-import React, { useEffect, useState } from "react";
-import { useDailyForecast } from "../queries/getDailyForecast";
+import React from "react";
 import { kelvinToCelsius } from "../helpers/kelvinToCelcius";
+import { useDailyForecast } from "../queries/getDailyForecast";
 
 type Props = {
   cityName: string;
@@ -15,11 +14,11 @@ const CurrentWeather: React.FC<Props> = ({ cityName }) => {
     return (
       <>There is no data to display, please add some cities to favorites</>
     );
-  
+
   const iconCode = CityData.weather[0].icon;
   const iconUrl = `https://openweathermap.org/img/wn/${iconCode}.png`;
   const weekDay = moment(CityData.dt * 1000).isoWeekday();
-  
+
   return (
     <div className="d-flex flex-column w-100 justify-content-center">
       <div className="d-flex justify-content-center">
