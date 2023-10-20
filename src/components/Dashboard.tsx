@@ -3,6 +3,7 @@ import {
   removeFavorite,
   selectActiveCity,
   selectFavorites,
+  setActive,
 } from "helpers/citySlice";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -19,16 +20,11 @@ const Dashboard = () => {
   const active = useSelector(selectActiveCity);
 
   useEffect(() => {
-    // const storedFavorites = Storage.getFavorites();
-    // if (!storedFavorites) return;
-    // if (storedFavorites.length > 0 && !active) {
-    //   setFavorites(storedFavorites);
-    //   setActive(storedFavorites[0]);
-    // }
+  
   }, []);
   const handleActive = (cityName: string) => {
     if (favorites.length === 1) return dispatch(selectActiveCity(favorites[0]));
-    dispatch(selectActiveCity(cityName));
+    dispatch(setActive(cityName));
   };
   const handleAddFavorite = (cityName: string) => {
     dispatch(addFavorite(cityName));
