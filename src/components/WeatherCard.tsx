@@ -1,24 +1,22 @@
 import React from "react";
+import { useDispatch } from "react-redux";
+import { removeFavorite, setActive } from "helpers/citySlice";
+import { useGlobalContext } from "..";
 import { useDailyForecast } from "../queries/getDailyForecast";
-import { Storage } from "../helpers/storage";
 type Props = {
   handleRemoveFavorite: (cityName: string) => void;
   cityName: string;
   handleActive: (cityName: string) => void;
-  active: string;
 };
 
 const WeatherCard: React.FC<Props> = ({
   cityName,
-  active,
   handleRemoveFavorite,
   handleActive,
 }) => {
   const { data: CityData, isLoading } = useDailyForecast(cityName);
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
+  const dispatch = useDispatch();
+  const { active } = useGlobalContext();
   if (!CityData) return null;
 
   const { weather } = CityData;
@@ -26,6 +24,9 @@ const WeatherCard: React.FC<Props> = ({
   const iconCode = weather[0].icon;
   const iconUrl = `https://openweathermap.org/img/wn/${iconCode}.png`;
 
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
   return (
     <div
       className={
@@ -41,7 +42,7 @@ const WeatherCard: React.FC<Props> = ({
       }}
       role="button"
       onClick={() => {
-        Storage.setActiveCity(cityName);
+        dispatch(setActive(cityName));
         handleActive(cityName);
       }}
     >
@@ -49,7 +50,7 @@ const WeatherCard: React.FC<Props> = ({
         onClick={(e) => {
           e.stopPropagation();
           handleRemoveFavorite(cityName);
-          Storage.removeFavorite(cityName);
+          dispatch(removeFavorite(cityName));
         }}
         className="btn btn-danger btn-sm rounded-lg position-absolute"
         style={{

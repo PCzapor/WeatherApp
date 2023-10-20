@@ -1,6 +1,6 @@
 import axios from "axios";
 import { useQuery } from "react-query";
-import { CityData } from "src/types";
+import { CityData } from "types";
 import { fetchCityData } from "./getCity";
 
 const fetchDailyForecast = async (cityName: string) => {

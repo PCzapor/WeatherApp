@@ -1,35 +1,66 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { toast } from "react-hot-toast";
-import { Storage } from "../helpers/storage";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { isLoading, login, selectLoggedUser, startLoading, stopLoading } from "../helpers/userSlice";
 
-const Login: React.FC = () => {
-  const [error, setError] = useState<string>("");
+const Login = () => {
+  const [error, setError] = useState("");
   const [credentials, setCredentials] = useState({
     username: "",
     password: "",
-    rememberMe: false,
   });
+ 
 
+  const dispach = useDispatch();
+  const loggedUser = useSelector(selectLoggedUser);
+const loading = useSelector(isLoading)
   const navigate = useNavigate();
   const handleLogin = async () => {
     try {
-      Storage.LogIn(credentials.username, credentials.password);
-      toast.success("Zalogowano");
-      navigate("/dashboard");
+      dispach(startLoading(true))
+      if (
+        credentials.username === "admin" &&
+        credentials.password === "admin"
+        ) {
+          dispach(
+            login({ login: credentials.username, password: credentials.password })
+            );
+            
+            toast.success("Zalogowano");
+            setTimeout(() => {
+              
+              if (loggedUser) {
+                dispach(stopLoading(false))
+                navigate("/dashboard");
+              }
+            }, 1500);
+      } else {
+        dispach(stopLoading(false))
+        throw "Invalid credentials";
+      }
     } catch (e) {
+      dispach(stopLoading(false))
       setError(String(e));
       toast.error("Wystąpił błąd logowania");
     }
     //autentykacja powinna nastapić z backendu
   };
+  console.log(loading)
   return (
+    <>
+    {loading?
+    <div className="d-flex justify-content-center  h-100">
+    <div className="spinner-border align-self-center" role="status">
+      <span className="sr-only">Loading...</span>
+    </div>
+  </div>:
     <div
-      className="d-flex align-items-center justify-content-center"
-      style={{
-        minHeight: "100vh",
-        backgroundColor: "#f0f8ff",
-      }}
+    className="d-flex align-items-center justify-content-center"
+    style={{
+      minHeight: "100vh",
+      backgroundColor: "#f0f8ff",
+    }}
     >
       <div className="container">
         <div className="row justify-content-center">
@@ -49,7 +80,7 @@ const Login: React.FC = () => {
                       username: e.target.value,
                     })
                   }
-                />
+                  />
               </div>
 
               <div className="form-group">
@@ -64,7 +95,7 @@ const Login: React.FC = () => {
                       password: e.target.value,
                     })
                   }
-                />
+                  />
               </div>
 
               <div className="text-center">
@@ -72,7 +103,7 @@ const Login: React.FC = () => {
                   type="submit"
                   className="btn btn-primary"
                   onClick={handleLogin}
-                >
+                  >
                   Login
                 </button>
               </div>
@@ -81,6 +112,9 @@ const Login: React.FC = () => {
         </div>
       </div>
     </div>
+    
+  }
+                  </>
   );
 };
 
