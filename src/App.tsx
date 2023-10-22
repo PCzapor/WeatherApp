@@ -8,14 +8,10 @@ import Register, { Step1, Step2, Step3 } from "components/Register";
 const App: React.FC<{}> = () => {
   return (
     <Routes>
-      <Route path="/" index element={<Login />}></Route>
+      <Route path="/" index element={<Login />} />
 
-      <Route path="/dashboard" element={<Dashboard />}></Route>
-      <Route path="/register/1" element={<Register/>}>
-        <Route path="" element={<Step1 />}/>
-        <Route path="2" element={<Step2 />}/>
-        <Route path="3" element={<Step3 />}/>
-      </Route>
+      <Route path="/dashboard" element={<Dashboard />} />
+      <Route path="/register/*" element={<Register />} />
     </Routes>
   );
 };
