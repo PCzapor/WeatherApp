@@ -89,7 +89,13 @@ if(loading)return (<div className="d-flex justify-content-center  h-100">
                   }
                   />
               </div>
-              <div className="text-center">
+              <div className="d-flex d-column">
+                <button
+                  className="btn btn-primary"
+                  onClick={()=>navigate('/register/1')}
+                  >
+                  Register
+                </button>
                 <button
                   type="submit"
                   className="btn btn-primary"
