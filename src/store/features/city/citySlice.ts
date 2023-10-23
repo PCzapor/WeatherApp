@@ -1,8 +1,18 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+interface City {
+    active:string|null;
+    favorites:string[];
+}
+
+const initialState:City = {
+    favorites:[],
+        active:  null,
+     }
+
 const citySlice = createSlice({
     name:'city',
-    initialState:{active:null, favorites:[]},
+    initialState,
     reducers:{
         addFavorite:(state, action)=>{
             const cityName = action.payload
@@ -12,17 +22,17 @@ const citySlice = createSlice({
         },
         removeFavorite:(state,action)=>{
             const cityName=action.payload;
-            if(state.favorites.includes(cityName)){
-               state.favorites= state.favorites.filter((e)=>e!==cityName)
-            }
+           state.favorites = state.favorites.filter((city)=>{
+           return city!==cityName
+           }
+            )
         },
         setActive:(state,action)=>{
+            if(!state.active) state.active=state.favorites[0]
             state.active = action.payload
 
         }
     }
 })
-export const {addFavorite,removeFavorite,setActive}= citySlice.actions;
-export const selectActiveCity= (state)=> state.city.active;
-export const selectFavorites = (state)=> state.city.favorites;
-export default citySlice.reducer 
+export const { addFavorite, removeFavorite, setActive }= citySlice.actions;
+export default citySlice.reducer

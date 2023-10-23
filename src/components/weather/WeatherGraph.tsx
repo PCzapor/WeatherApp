@@ -1,5 +1,5 @@
 import React from "react";
-import { kelvinToCelsius } from "../helpers/kelvinToCelcius";
+import { kelvinToCelsius } from "../../helpers/kelvinToCelcius";
 
 type WeatherGraphProps = {
   temp: number;

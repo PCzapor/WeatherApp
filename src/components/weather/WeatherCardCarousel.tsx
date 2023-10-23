@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { setActive } from "helpers/citySlice";
-import { useGlobalContext } from "..";
-import FavoritesAdd from "./FavoritesAdd";
+import { setActive } from "store/features/city/citySlice";
+import FavoritesAdd from "../ui/FavoritesAdd";
 import WeatherCard from "./WeatherCard";
+import { useAppSelector } from "store/hooks";
 type Props = {
   handleRemoveFavorite: (cityName: string) => void;
   handleAddFavorite: (cityName: string) => void;
@@ -16,7 +16,7 @@ const WeatherCardCarousel: React.FC<Props> = ({
 }) => {
   const [start, setStart] = useState(0);
   const [end, setEnd] = useState(3);
-  const { favorites } = useGlobalContext();
+  const favorites = useAppSelector((state)=>state.rootReducer.city.favorites);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -57,7 +57,7 @@ const WeatherCardCarousel: React.FC<Props> = ({
   }
   return (
     <div className="d-flex">
-      {favorites && favorites.length > 3 ? (
+      {favorites.length > 3 ? (
         <>
           <button
             className={
@@ -71,7 +71,7 @@ const WeatherCardCarousel: React.FC<Props> = ({
             &larr;
           </button>
 
-          {favorites.slice(start, end).map((name, idx) => {
+          {favorites.slice(start, end).map((name:string, idx:number) => {
             return (
               <WeatherCard
                 key={idx}
@@ -97,7 +97,7 @@ const WeatherCardCarousel: React.FC<Props> = ({
       ) : (
         <div className="d-flex mr-1 align-items-center">
           {favorites
-            ? favorites.map((name, idx) => {
+            ? favorites.map((name:string, idx:number) => {
                 return (
                   <WeatherCard
                     key={idx}

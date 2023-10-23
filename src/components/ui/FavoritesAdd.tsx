@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
-import { addFavorite } from "helpers/citySlice";
+import { addFavorite } from "store/features/city/citySlice";
 
 type Props = {
   handleAddFavorite: (cityName: string) => void;
@@ -15,7 +15,7 @@ const FavoritesAdd: React.FC<Props> = ({ handleAddFavorite }) => {
   };
 
   const handleAdd = () => {
-    if (newCity.length === 0) return;
+    if (!newCity.length) return;
     const capitalizedCity = capitalizeFirstLetter(newCity);
     handleAddFavorite(capitalizedCity);
     dispatch(addFavorite(capitalizedCity));

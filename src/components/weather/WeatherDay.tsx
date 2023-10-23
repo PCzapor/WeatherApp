@@ -1,8 +1,8 @@
 import moment from "moment";
 import React from "react";
 import WeatherGraph from "./WeatherGraph";
-import { kelvinToCelsius } from "../helpers/kelvinToCelcius";
-import { useDailyForecast } from "../queries/getDailyForecast";
+import { kelvinToCelsius } from "../../helpers/kelvinToCelcius";
+import { useDailyForecast } from "../hooks/getDailyForecast";
 
 type Props = {
   cityName: string;
@@ -25,7 +25,7 @@ const WeatherDay: React.FC<Props> = ({
 }) => {
   const { data: CityData, isLoading } = useDailyForecast(cityName);
   
-  const iconUrl = `https://openweathermap.org/img/wn/${iconCode}.png`;
+  const iconUrl = `${process.env.REACT_APP_BASE_ICON_URL}${iconCode}.png`;
   
   const lowesTemp = kelvinToCelsius(temp_min);
   const highestTemp = kelvinToCelsius(temp_max);

@@ -7,20 +7,20 @@ import App from "./App";
 import "./index.css";
 import reportWebVitals from "./reportWebVitals";
 import { Provider } from "react-redux";
-import store from "./helpers/sliceStore";
+import store from "./store/sliceStore";
 
-export type GlobalContent = {
-  favorites: string[];
-  active: string;
-};
+// export type GlobalContent = {
+//   favorites: string[];
+//   active: string;
+// };
 
-export const MyGlobalContext = createContext<GlobalContent>({
-  favorites: [],
-  active: "",
-});
+// export const MyGlobalContext = createContext<GlobalContent>({
+//   favorites: [],
+//   active: "",
+// });
 
-export const useGlobalContext = (): GlobalContent =>
-  useContext(MyGlobalContext);
+// export const useGlobalContext = (): GlobalContent =>
+//   useContext(MyGlobalContext);
 const client = new QueryClient();
 
 const root = ReactDOM.createRoot(

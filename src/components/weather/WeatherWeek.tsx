@@ -1,16 +1,19 @@
-import { useGlobalContext } from "..";
-import { use5DayForecast } from "../queries/get5DayForecast";
-import { CityData5Days, WeatherDataItem } from "../types";
+import { useAppSelector } from "store/hooks";
+import { CityData5Days, WeatherDataItem } from "../../types";
+import { useFiveDayForecast } from "../hooks/getFiveDayForecast";
 import WeatherDay from "./WeatherDay";
+import { fetchCityData } from "components/api/fetch";
 
 
 
 const WeatherWeek = () => {
-  const {active}=useGlobalContext();
-  const { data: City5Data, isLoading } = use5DayForecast(active);
-  if (!active) return <>Loading..</>;
+  const active= useAppSelector((state)=>state.rootReducer.city.active)
+  const { data: City5Data, isLoading } = useFiveDayForecast(active);
+  
+  if (!active) return <>No active city</>
   if (!City5Data) return <>please select a city</>;
   if (isLoading) return <>Loading..</>;
+
 
   function groupWeatherDataByDay(data: CityData5Days) { 
   return data.list.reduce<Record<string,WeatherDataItem[]>>((groupedData,item)=>{
@@ -44,10 +47,8 @@ const WeatherWeek = () => {
         avgHumidity,}
   })
   const groupedData = groupWeatherDataByDay(City5Data);
-  
   const weatherStats = calculateWeatherStatsByDay(groupedData);
   
-
 
   return (
     <div className="w-75">

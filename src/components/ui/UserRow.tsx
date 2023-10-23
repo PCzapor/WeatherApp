@@ -1,5 +1,5 @@
 import { useDispatch } from "react-redux";
-import { logout } from "helpers/userSlice";
+import { logout } from "store/features/user/userSlice";
 
 const UserNotofication = () => {
   return (

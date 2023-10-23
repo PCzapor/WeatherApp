@@ -1,8 +1,8 @@
 import React from "react";
 import { useDispatch } from "react-redux";
-import { removeFavorite, setActive } from "helpers/citySlice";
-import { useGlobalContext } from "..";
-import { useDailyForecast } from "../queries/getDailyForecast";
+import { removeFavorite, setActive } from "store/features/city/citySlice";
+import { useDailyForecast } from "../hooks/getDailyForecast";
+import { useAppSelector } from "store/hooks";
 type Props = {
   handleRemoveFavorite: (cityName: string) => void;
   cityName: string;
@@ -16,17 +16,17 @@ const WeatherCard: React.FC<Props> = ({
 }) => {
   const { data: CityData, isLoading } = useDailyForecast(cityName);
   const dispatch = useDispatch();
-  const { active } = useGlobalContext();
+  const active= useAppSelector((state)=>state.rootReducer.city.active)
   if (!CityData) return null;
 
   const { weather } = CityData;
   const weatherDescription = weather[0].description;
   const iconCode = weather[0].icon;
-  const iconUrl = `https://openweathermap.org/img/wn/${iconCode}.png`;
-
+  const iconUrl = `${process.env.REACT_APP_BASE_ICON_URL}${iconCode}.png`;
   if (isLoading) {
     return <div>Loading...</div>;
   }
+ 
   return (
     <div
       className={

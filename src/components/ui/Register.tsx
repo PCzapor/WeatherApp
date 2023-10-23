@@ -30,6 +30,8 @@ type Props = {
   onPrev?: () => void;
 };
 
+
+
 export const Step1: React.FC<Props> = ({ register, onNext }) => {
   const Input = ({ label, register, required }: InputProps) => (
     <div className="form-group">
@@ -41,29 +43,32 @@ export const Step1: React.FC<Props> = ({ register, onNext }) => {
   return (
     <div className="col-md-6 w-50">
       <h2 className="mb-4 text-center">Register</h2>
-      <div className="progress" style={{ height: "1px" }}>
+      <div className="progress my-3 " style={{ height: "2px" }}>
         <div
-          className="progress-bar"
+          className="progress-bar "
           role="progressbar"
-          style={{ width: "25%" }}
+          style={{ width: "33.3%" }}
           aria-valuemin={0}
           aria-valuenow={25}
           aria-valuemax={100}
-        ></div>
+          ></div>
       </div>
       <Input label="Username" register={register} required />
       <Input label="Password" register={register} required />
       <Input label="Confirm password" register={register} required />
-      <button onClick={onNext} className="btn btn-primary">
+      <div className="w-100 d-flex justify-content-end">
+
+      <button onClick={onNext} className="btn btn-primary ">
         Next
       </button>
+      </div>
     </div>
   );
 };
 export const Step2: React.FC<Props> = ({ register, onNext, onPrev }) => {
   const Select = React.forwardRef<
-    HTMLSelectElement,
-    { label: string } & ReturnType<UseFormRegister<InputVal>>
+  HTMLSelectElement,
+  { label: string } & ReturnType<UseFormRegister<InputVal>>
   >(({ onChange, onBlur, name, label }, ref) => (
     <>
       <label className="m-2">{label}</label>
@@ -76,7 +81,7 @@ export const Step2: React.FC<Props> = ({ register, onNext, onPrev }) => {
   return (
     <div className="col-md-6">
       <h2 className="mb-4 text-center">Register</h2>
-      <div className="progress" style={{ height: "2px" }}>
+      <div className="progress  my-3" style={{ height: "2px" }}>
         <div
           className="progress-bar"
           role="progressbar"
@@ -84,13 +89,13 @@ export const Step2: React.FC<Props> = ({ register, onNext, onPrev }) => {
           aria-valuemin={0}
           aria-valuenow={66.6}
           aria-valuemax={100}
-        ></div>
+          ></div>
       </div>
       <div className="w-75 my-4">
         <Select
           label="Something from endpoint"
           {...register("Something from endpoint")}
-        />
+          />
       </div>
       <div className="w-100 d-flex justify-content-between">
         <button onClick={onPrev} className="btn btn-danger">
@@ -103,53 +108,53 @@ export const Step2: React.FC<Props> = ({ register, onNext, onPrev }) => {
     </div>
   );
 };
-export const Step3: React.FC<Props> = ({ register, onPrev }) => {
+export const Step3: React.FC<Props> = ({  onPrev,register }) => {
   const { control } = useForm<InputVal>({
+    
     defaultValues: {
       checkbox: false,
     },
   });
-
-  const Checkbox = ({ field }: { field: FieldValues }) => {
-    console.log(field.value);
-    return <input type="checkbox" aria-label="consent checkbox" {...field} />;
+  const Checkbox = ({ ...rest }: any) => {
+    return <input type="checkbox"{...rest} />;
   };
 
   return (
-    <div className="col-md-6">
+    <form className="col-md-6" >
       <h2 className="mb-4 text-center">Register</h2>
-      <div className="progress" style={{ height: "2px" }}>
+      <div className="progress  my-3" style={{ height: "2px" }}>
         <div
           className="progress-bar"
           role="progressbar"
-          style={{ width: "66.6%" }}
+          style={{ width: "100%" }}
           aria-valuemin={0}
           aria-valuenow={66.6}
           aria-valuemax={100}
         ></div>
       </div>
       <div className="w-75 my-4">
-        <Controller
+        {/* <Controller
           name="checkbox"
           control={control}
           rules={{ required: true }}
-          render={({ field }) => <Checkbox field={field} />}
-        />
+          render={({ field }) => />}
+        /> */}
+        <Checkbox name="checkbox" {...register} />
       </div>
       <div className="w-100 d-flex justify-content-between">
         <button onClick={onPrev} className="btn btn-danger">
           Previous
         </button>
-        <input type="submit" className="btn btn-primary" />
+        <button type="submit" >text</button>
       </div>
-    </div>
+    </form>
   );
 };
 
 const Register = () => {
   const { register, handleSubmit } = useForm<InputVal>();
   const onSubmit: SubmitHandler<InputVal> = (data) => {
-    console.log(data.checkbox);
+    console.log(data);
   };
   const navigate = useNavigate();
   const handleNextChange = (step: number) => {

@@ -1,29 +1,24 @@
+import { useDispatch } from "react-redux";
 import {
   addFavorite,
   removeFavorite,
-  selectActiveCity,
-  selectFavorites,
   setActive,
-} from "helpers/citySlice";
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { MyGlobalContext } from "..";
-import CurrentWeather from "./CurrentWeather";
-import Search from "./Search";
-import { UserRow } from "./UserRow";
-import WeatherCardCarousel from "./WeatherCardCarousel";
-import WeatherWeek from "./WeatherWeek";
+} from "store/features/city/citySlice";
+import Search from "./ui/Search";
+import { UserRow } from "./ui/UserRow";
+import CurrentWeather from "./weather/CurrentWeather";
+import WeatherCardCarousel from "./weather/WeatherCardCarousel";
+import WeatherWeek from "./weather/WeatherWeek";
+import { useAppSelector } from "store/hooks";
 
 const Dashboard = () => {
   const dispatch = useDispatch();
-  const favorites = useSelector(selectFavorites);
-  const active = useSelector(selectActiveCity);
+  const active= useAppSelector((state)=>state.rootReducer.city.active)
+  const favorites= useAppSelector((state)=>state.rootReducer.city.active)
 
-  useEffect(() => {
-  
-  }, []);
   const handleActive = (cityName: string) => {
-    if (favorites.length === 1) return dispatch(selectActiveCity(favorites[0]));
+    if(!favorites)return
+   
     dispatch(setActive(cityName));
   };
   const handleAddFavorite = (cityName: string) => {
@@ -35,7 +30,7 @@ const Dashboard = () => {
   };
 
   return (
-    <MyGlobalContext.Provider value={{ favorites, active }}>
+
       <main className="container px-0 h-100 w-100 d-flex align-items-center  justify-content-center">
         <div
           style={{ height: "85%", backgroundColor: "lightgreen" }}
@@ -75,7 +70,7 @@ const Dashboard = () => {
           </div>
         </div>
       </main>
-    </MyGlobalContext.Provider>
+    
   );
 };
 

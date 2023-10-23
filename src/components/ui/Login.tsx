@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { toast } from "react-hot-toast";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { isLoading, login, selectLoggedUser, startLoading, stopLoading } from "../helpers/userSlice";
+import { login,  } from "../../store/features/user/userSlice";
+import { useAppSelector } from '../../store/hooks';
 
 const Login = () => {
   const [error, setError] = useState("");
@@ -11,14 +12,13 @@ const Login = () => {
     password: "",
   });
  
-
   const dispach = useDispatch();
-  const loggedUser = useSelector(selectLoggedUser);
-const loading = useSelector(isLoading)
+  
+  const loading = useAppSelector((state)=>state.rootReducer.user.isLoading)
   const navigate = useNavigate();
   const handleLogin = async () => {
     try {
-      dispach(startLoading(true))
+  
       if (
         credentials.username === "admin" &&
         credentials.password === "admin"
@@ -28,33 +28,26 @@ const loading = useSelector(isLoading)
             );
             
             toast.success("Zalogowano");
-            setTimeout(() => {
-              
-              if (loggedUser) {
-                dispach(stopLoading(false))
                 navigate("/dashboard");
-              }
-            }, 1500);
+          
       } else {
-        dispach(stopLoading(false))
+      
         throw "Invalid credentials";
       }
     } catch (e) {
-      dispach(stopLoading(false))
+   
       setError(String(e));
       toast.error("Wystąpił błąd logowania");
     }
     //autentykacja powinna nastapić z backendu
   };
-  console.log(loading)
+ 
+if(loading)return (<div className="d-flex justify-content-center  h-100">
+<div className="spinner-border align-self-center" role="status">
+  <span className="sr-only">Loading...</span>
+</div>
+</div>)
   return (
-    <>
-    {loading?
-    <div className="d-flex justify-content-center  h-100">
-    <div className="spinner-border align-self-center" role="status">
-      <span className="sr-only">Loading...</span>
-    </div>
-  </div>:
     <div
     className="d-flex align-items-center justify-content-center"
     style={{
@@ -82,7 +75,6 @@ const loading = useSelector(isLoading)
                   }
                   />
               </div>
-
               <div className="form-group">
                 <input
                   type="password"
@@ -97,7 +89,6 @@ const loading = useSelector(isLoading)
                   }
                   />
               </div>
-
               <div className="text-center">
                 <button
                   type="submit"
@@ -111,10 +102,7 @@ const loading = useSelector(isLoading)
           </div>
         </div>
       </div>
-    </div>
-    
-  }
-                  </>
+    </div>           
   );
 };
 
