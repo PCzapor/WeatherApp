@@ -1,10 +1,10 @@
-import { fetchCityData } from "components/api/fetch";
 import { useGetCity } from "components/hooks/getCity";
-import React, { useEffect, useState } from "react";
+import useDebounce from "components/hooks/useDebounce";
+import React, { useState } from "react";
 import { Path, SubmitHandler, UseFormRegister, useForm } from "react-hook-form";
 import { Route, Routes, useNavigate } from "react-router-dom";
 import { SingleValue } from "react-select";
-import AsyncSelect, { useAsync } from "react-select/async";
+import AsyncSelect from "react-select/async";
 
 type InputVal = {
     Username: string;
@@ -31,7 +31,7 @@ export const Step1: React.FC<Props> = ({ register, onNext }) => {
     const Input = ({ label, register, required }: InputProps) => (
         <div className="form-group d-flex flex-column">
             <label>{label}</label>
-            <input {...register(label, { required })} />
+            <input {...register(label, { required: `${label} is required` })} />
         </div>
     );
 
@@ -62,30 +62,48 @@ export const Step1: React.FC<Props> = ({ register, onNext }) => {
 
 export const Step2: React.FC<Props> = ({ register, onNext, onPrev }) => {
     const [searchedCity, setSearchedCity] = useState("");
-    const { data } = useGetCity(searchedCity);
-
+    // const [data, setData] = useState("");
+    const debouncedSearch = useDebounce(searchedCity, 500);
+    const cityData = useGetCity(debouncedSearch);
     const handleChange = (
         selectedOptions: SingleValue<{ value: string; label: string }>
     ) => {
         console.log("selected", selectedOptions);
         register("City", { value: selectedOptions?.label });
     };
-    const loadOptions = (
-        inputValue: string,
-        callback: (options: { value: string; label: string }[]) => void
-    ) => {
-        setTimeout(() => {
-            setSearchedCity(inputValue);
-            if (!data) return;
-            const myList = [{ value: data.name, label: data.name }];
 
-            const filterOptions = myList.filter((item) =>
-                item.label.toLowerCase().includes(inputValue.toLowerCase())
-            );
-            callback(filterOptions);
-            console.log("myList", myList, "filtered", filterOptions);
-        }, 2000);
+    const fetch = async () => {
+        const data = await cityData.refetch(debouncedSearch);
+        const myData = data.data;
+        if (!myData) return;
+
+        return myData;
     };
+    // const handleInputChange = async (value: string) => {
+    //     setSearchedCity(value);
+    //     const data = await fetch();
+    //     if (!data) return;
+    //     return setData(data?.name);
+    // };
+
+    const promiseOptions = async (inputValue: string) => {
+        function update(inputValue: string) {
+            setSearchedCity(inputValue);
+        }
+        update(inputValue);
+        const myData = await fetch();
+        if (!myData) return;
+
+        const myList = [
+            {
+                value: myData.name,
+                label: myData.name,
+            },
+        ];
+        debugger;
+        return myList;
+    };
+
     return (
         <div className="col-md-6">
             <h2 className="mb-4 text-center">Register</h2>
@@ -101,10 +119,18 @@ export const Step2: React.FC<Props> = ({ register, onNext, onPrev }) => {
             </div>
             <div className="w-75 my-4">
                 <AsyncSelect
-                    loadOptions={loadOptions}
-                    defaultOptions
+                    //@ts-ignore
+                    loadOptions={promiseOptions}
                     onChange={handleChange}
                 />
+                {/* <input
+                    placeholder="select city"
+                    value={searchedCity}
+                    onChange={(e) => handleInputChange(e.target.value)}
+                />
+                <select>
+                    <option label={data}>{data}</option>
+                </select> */}
             </div>
             <div className="w-100 d-flex justify-content-between">
                 <button onClick={onPrev} className="btn btn-danger">
@@ -118,9 +144,9 @@ export const Step2: React.FC<Props> = ({ register, onNext, onPrev }) => {
     );
 };
 export const Step3: React.FC<Props> = ({ onPrev, register }) => {
-    const Checkbox = ({ ...rest }: any) => {
-        return <input type="checkbox" {...rest} />;
-    };
+    // const Checkbox = ({ ...rest }: any) => {
+    //     return <input type="checkbox" {...rest} />;
+    // };
 
     return (
         <div className="col-md-6">
@@ -136,7 +162,7 @@ export const Step3: React.FC<Props> = ({ onPrev, register }) => {
                 ></div>
             </div>
             <div className="w-75 my-4">
-                <Checkbox name="checkbox" {...register} />
+                <input type="checkbox" {...register("checkbox")} />
             </div>
             <div className="w-100 d-flex justify-content-between">
                 <button onClick={onPrev} className="btn btn-danger">
@@ -163,7 +189,7 @@ const Register = () => {
         navigate(`/register/${step}`);
     };
     return (
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form onSubmit={handleSubmit(onSubmit)} noValidate>
             <div
                 className="d-flex align-items-center justify-content-center"
                 style={{

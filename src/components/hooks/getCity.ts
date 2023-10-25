@@ -10,5 +10,5 @@ export const useGetCity = (cityName: string) =>
 
             return data;
         },
-        { enabled: !!cityName, refetchOnWindowFocus: false }
+        { enabled: false, refetchOnWindowFocus: false }
     );
