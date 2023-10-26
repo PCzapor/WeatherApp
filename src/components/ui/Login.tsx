@@ -102,16 +102,20 @@ const Login = () => {
                                     }
                                 />
                             </div>
-                            <div className="d-flex d-column">
+                            <div className="d-flex flex-column justify-content-center align-items-center">
                                 <button
-                                    className="btn btn-primary"
-                                    onClick={() => navigate("/register/1")}
+                                    type="button"
+                                    className="btn btn-info  my-2 w-25"
+                                    onClick={(e) => {
+                                        e.preventDefault();
+                                        navigate("/register/1");
+                                    }}
                                 >
                                     Register
                                 </button>
                                 <button
                                     type="submit"
-                                    className="btn btn-primary"
+                                    className="btn btn-primary w-25"
                                     onClick={handleLogin}
                                 >
                                     Login
