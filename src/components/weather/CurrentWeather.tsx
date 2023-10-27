@@ -1,7 +1,7 @@
 import moment from "moment";
 import React from "react";
-import { kelvinToCelsius } from "../helpers/kelvinToCelcius";
-import { useDailyForecast } from "../queries/getDailyForecast";
+import { kelvinToCelsius } from "../../helpers/kelvinToCelcius";
+import { useDailyForecast } from "../hooks/getDailyForecast";
 
 type Props = {
   cityName: string;
@@ -9,6 +9,7 @@ type Props = {
 
 const CurrentWeather: React.FC<Props> = ({ cityName }) => {
   const { data: CityData, isLoading } = useDailyForecast(cityName);
+  //tu przerobic na useQuery po kluczu z usedailyforcast
   if (isLoading) return <>Loading..</>;
   if (!CityData)
     return (
@@ -16,7 +17,7 @@ const CurrentWeather: React.FC<Props> = ({ cityName }) => {
     );
 
   const iconCode = CityData.weather[0].icon;
-  const iconUrl = `https://openweathermap.org/img/wn/${iconCode}.png`;
+  const iconUrl = `${process.env.REACT_APP_BASE_ICON_URL}${iconCode}.png`;
   const weekDay = moment(CityData.dt * 1000).isoWeekday();
 
   return (
