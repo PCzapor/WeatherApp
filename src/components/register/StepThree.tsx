@@ -2,7 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
-import { stepThreeSubmit } from "store/features/register/stepThreeSlice";
+import { stepThreeSubmit } from "store/features/register/registerSlice";
 import { z } from "zod";
 type stepThreeValidationType = z.infer<typeof stepThreeValidation>;
 const stepThreeValidation = z.object({

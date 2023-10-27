@@ -2,16 +2,12 @@ import { combineReducers, configureStore } from "@reduxjs/toolkit";
 import userSlice from "./features/user/userSlice";
 import citySlice from "./features/city/citySlice";
 import apiSlice from "./features/city/cityApiSlice";
-import stepOneSlice from "./features/register/stepOneSlice";
-import stepTwoSlice from "./features/register/stepTwoSlice";
-import stepThreeSlice from "./features/register/stepThreeSlice";
+import registerSteps from "./features/register/registerSlice";
 
 const rootReducer = combineReducers({
     user: userSlice,
     city: citySlice,
-    stepOne: stepOneSlice,
-    stepTwo: stepTwoSlice,
-    stepThree: stepThreeSlice,
+    steps: registerSteps,
 });
 
 const store = configureStore({

@@ -6,7 +6,7 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { SingleValue } from "react-select";
 import AsyncSelect from "react-select/async";
-import { stepTwoSubmit } from "store/features/register/stepTwoSlice";
+import { stepTwoSubmit } from "store/features/register/registerSlice";
 import { z } from "zod";
 
 type stepTwoValidationType = z.infer<typeof stepTwoValidation>;
@@ -63,7 +63,6 @@ const StepTwo = () => {
             <div className="w-75 my-4">
                 <AsyncSelect
                     loadOptions={promiseOptions}
-                    defaultOptions
                     onChange={handleChange}
                     cacheOptions
                     placeholder={"Input home city"}

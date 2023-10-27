@@ -8,18 +8,19 @@ import {
 } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { stepOneSubmit } from "store/features/register/stepOneSlice";
+import { stepOneSubmit } from "store/features/register/registerSlice";
 import { z } from "zod";
 
 type stepOneValidationType = z.infer<typeof stepOneValidation>;
 
 type InputProps = {
-    name:"username"|"password"|"confirmPassword" ;
-    label: Path<stepOneValidationType>;
+    name: Path<stepOneValidationType>;
+    label: "username" | "password" | "Confirm password";
     register: UseFormRegister<stepOneValidationType>;
     required: boolean;
-    placeholder: "username"|"password"|"Confirm Password";
-    error: FieldError ;
+    placeholder: "username" | "password" | "Confirm Password";
+    error: FieldError | undefined;
+    autoFocus?: boolean;
 };
 const stepOneValidation = z
     .object({
@@ -37,17 +38,18 @@ const stepOneValidation = z
         path: ["confirmPassword"],
     });
 
-function Input<T>(props:{
+function Input<T extends InputProps>({
     name,
     register,
     label,
     required,
     placeholder,
     error,
-}: T):T {
+    autoFocus,
+}: T) {
     return (
         <div className="form-group d-flex flex-column">
-            <label></label>
+            <label>{label}</label>
             <input
                 {...register(name, { required: `${name} is required` })}
                 autoFocus={autoFocus}
@@ -70,7 +72,6 @@ const StepOne = () => {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const onSubmit: SubmitHandler<stepOneValidationType> = (data) => {
-        console.log(data);
         dispatch(stepOneSubmit({ ...data }));
         navigate("/register/2");
     };
@@ -88,58 +89,30 @@ const StepOne = () => {
                     aria-valuemax={100}
                 ></div>
             </div>
-            <Input<InputProps>
+            <Input
                 name="username"
-                label={[
-                    "username",
-                    "password", 
-                    "confirmPassword",
-                ]}
+                label="username"
                 register={register}
                 required
-                placeholder={"Username"}
-                error={errors.username}
-                />
-            <Input<InputProps>
-                name="password"
-                label={["username","password", "confirmPassword",]}
-                register={register}
-                required
-                placeholder={"Password"}
-                error={errors.password}
-                />
-            <Input<InputProps>
-                name="confirmPassword"
-                label={["username","password", "confirmPassword",]}
-                register={register}
-                required
-                placeholder={"Confirm Password"}
-                error={errors.confirmPassword}
-                />
-            {/* <Input
-                name="username"
-                label="Username"
-                register={register}
-                required
-                placeholder={"Username"}
+                placeholder="username"
                 error={errors.username}
             />
             <Input
                 name="password"
-                label="Password"
+                label="password"
                 register={register}
                 required
-                placeholder={"Password"}
+                placeholder="password"
                 error={errors.password}
             />
             <Input
                 name="confirmPassword"
-                label="Confirm Password"
+                label="Confirm password"
                 register={register}
                 required
-                placeholder={"Confirm Password"}
+                placeholder="Confirm Password"
                 error={errors.confirmPassword}
-            /> */}
+            />
             <div className="w-100 d-flex justify-content-end">
                 <button
                     type="submit"

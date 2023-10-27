@@ -88,5 +88,4 @@ export type CityList = {
 export enum StorageKeys {
     Favorites = "weather_app_favorites",
     User = "selected_user",
-    ActiveCity = "weather_app_active_city",
 }
