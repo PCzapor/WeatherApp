@@ -2,17 +2,17 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { fetchCityData } from "components/api/fetch";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useMutation } from "react-query";
-import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { SingleValue } from "react-select";
 import AsyncSelect from "react-select/async";
 import { stepTwoSubmit } from "store/features/register/registerSlice";
+import { useAppDispatch } from "store/hooks";
 import { z } from "zod";
 
-type stepTwoValidationType = z.infer<typeof stepTwoValidation>;
 const stepTwoValidation = z.object({
     city: z.string().optional(),
 });
+type stepTwoValidationType = z.infer<typeof stepTwoValidation>;
 const StepTwo = () => {
     const { mutateAsync } = useMutation(fetchCityData);
     const {
@@ -22,10 +22,11 @@ const StepTwo = () => {
     } = useForm<stepTwoValidationType>({
         resolver: zodResolver(stepTwoValidation),
     });
-    const dispatch = useDispatch();
+
+    const dispach = useAppDispatch();
     const navigate = useNavigate();
     const onSubmit: SubmitHandler<stepTwoValidationType> = (data) => {
-        dispatch(stepTwoSubmit({ ...data }));
+        dispach(stepTwoSubmit({ ...data }));
         navigate("/register/3");
     };
 
@@ -75,6 +76,7 @@ const StepTwo = () => {
                         navigate("/register/1");
                     }}
                     className="btn btn-danger"
+                    type="button"
                 >
                     Previous
                 </button>

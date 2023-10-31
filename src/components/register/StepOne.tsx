@@ -1,17 +1,15 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
-    SubmitHandler,
-    useForm,
     FieldError,
-    UseFormRegister,
     Path,
+    SubmitHandler,
+    UseFormRegister,
+    useForm,
 } from "react-hook-form";
-import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { stepOneSubmit } from "store/features/register/registerSlice";
+import { useAppDispatch } from "store/hooks";
 import { z } from "zod";
-
-type stepOneValidationType = z.infer<typeof stepOneValidation>;
 
 type InputProps = {
     name: Path<stepOneValidationType>;
@@ -21,7 +19,7 @@ type InputProps = {
     placeholder: "username" | "password" | "Confirm Password";
     error: FieldError | undefined;
     autoFocus?: boolean;
-};
+} & React.InputHTMLAttributes<HTMLInputElement>;
 const stepOneValidation = z
     .object({
         username: z.string().min(5, "min lenght 5"),
@@ -37,6 +35,7 @@ const stepOneValidation = z
         message: "Passwords don't match",
         path: ["confirmPassword"],
     });
+type stepOneValidationType = z.infer<typeof stepOneValidation>;
 
 function Input<T extends InputProps>({
     name,
@@ -51,7 +50,7 @@ function Input<T extends InputProps>({
         <div className="form-group d-flex flex-column">
             <label>{label}</label>
             <input
-                {...register(name, { required: `${name} is required` })}
+                {...register(name)}
                 autoFocus={autoFocus}
                 placeholder={placeholder}
                 className={`${error && "border-danger"}`}
@@ -69,7 +68,7 @@ const StepOne = () => {
     } = useForm<stepOneValidationType>({
         resolver: zodResolver(stepOneValidation),
     });
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const onSubmit: SubmitHandler<stepOneValidationType> = (data) => {
         dispatch(stepOneSubmit({ ...data }));

@@ -1,13 +1,13 @@
-import { SetFavorites } from "components/localStorage/Storage";
-import React, { useState } from "react";
+// import { SetFavorites } from "components/localStorage/Storage";
+import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { addFavorite } from "store/features/city/citySlice";
 
-type Props = {
+type FavoritesAddPros = {
     handleAddFavorite: (cityName: string) => void;
 };
 
-const FavoritesAdd: React.FC<Props> = ({ handleAddFavorite }) => {
+const FavoritesAdd = ({ handleAddFavorite }: FavoritesAddPros) => {
     const [newCity, setNewCity] = useState("");
     const dispatch = useDispatch();
 
@@ -19,7 +19,7 @@ const FavoritesAdd: React.FC<Props> = ({ handleAddFavorite }) => {
         if (!newCity.length) return;
         const capitalizedCity = capitalizeFirstLetter(newCity);
         handleAddFavorite(capitalizedCity);
-        SetFavorites(capitalizedCity);
+        // SetFavorites(capitalizedCity);
         dispatch(addFavorite(capitalizedCity));
         setNewCity("");
     };

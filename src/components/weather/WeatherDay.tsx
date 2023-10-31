@@ -1,9 +1,9 @@
 import moment from "moment";
-import React from "react";
 import WeatherGraph from "./WeatherGraph";
 import { kelvinToCelsius } from "../../helpers/kelvinToCelcius";
+import { iconApiKey } from "constants/apiKey.constants";
 
-type Props = {
+type WeatherDayProps = {
     iconCode: string;
     humidity: number;
     temp_max: number;
@@ -12,15 +12,15 @@ type Props = {
     date: string;
 };
 
-const WeatherDay: React.FC<Props> = ({
+const WeatherDay = ({
     iconCode,
     humidity,
     temp_max,
     temp_min,
     temp,
     date,
-}) => {
-    const iconUrl = `${process.env.REACT_APP_BASE_ICON_URL}${iconCode}.png`;
+}: WeatherDayProps) => {
+    const iconUrl = iconApiKey(iconCode);
 
     const lowesTemp = kelvinToCelsius(temp_min);
     const highestTemp = kelvinToCelsius(temp_max);

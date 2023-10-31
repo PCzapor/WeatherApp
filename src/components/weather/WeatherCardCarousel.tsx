@@ -1,24 +1,25 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { setActive } from "store/features/city/citySlice";
 import FavoritesAdd from "../ui/FavoritesAdd";
 import WeatherCard from "./WeatherCard";
 import { useAppSelector } from "store/hooks";
-type Props = {
+type WeatherCardCarouselProps = {
     handleRemoveFavorite: (cityName: string) => void;
     handleAddFavorite: (cityName: string) => void;
     handleActive: (cityName: string) => void;
 };
-const WeatherCardCarousel: React.FC<Props> = ({
+const WeatherCardCarousel = ({
     handleAddFavorite,
     handleActive,
     handleRemoveFavorite,
-}) => {
+}: WeatherCardCarouselProps) => {
     const [start, setStart] = useState(0);
     const [end, setEnd] = useState(3);
     const favorites = useAppSelector(
         (state) => state.rootReducer.city.favorites
     );
+    console.log(favorites);
     const dispatch = useDispatch();
 
     useEffect(() => {

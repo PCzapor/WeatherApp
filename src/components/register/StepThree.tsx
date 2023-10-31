@@ -1,14 +1,14 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import { stepThreeSubmit } from "store/features/register/registerSlice";
+import { useAppDispatch } from "store/hooks";
 import { z } from "zod";
-type stepThreeValidationType = z.infer<typeof stepThreeValidation>;
 const stepThreeValidation = z.object({
     rodo: z.boolean(),
     termsOfUse: z.boolean(),
 });
+type stepThreeValidationType = z.infer<typeof stepThreeValidation>;
 const StepThree = () => {
     const {
         register,
@@ -17,7 +17,7 @@ const StepThree = () => {
     } = useForm<stepThreeValidationType>({
         resolver: zodResolver(stepThreeValidation),
     });
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
     const navigate = useNavigate();
     const onSubmit: SubmitHandler<stepThreeValidationType> = (data) => {
         dispatch(stepThreeSubmit({ ...data }));

@@ -1,18 +1,29 @@
 import { createSlice } from "@reduxjs/toolkit";
-import {
-    GetFavorites,
-    RemoveFavorites,
-    SetFavorites,
-} from "components/localStorage/Storage";
+import { StorageKeys } from "types";
+// import {
+//     GetFavorites,
+//     RemoveFavorites,
+//     SetFavorites,
+// } from "components/localStorage/Storage";
 
 interface City {
     active: string | null;
     favorites: string[];
 }
-const data = GetFavorites();
 
+function GetFavorites(): string[] {
+    const user = localStorage.getItem(StorageKeys.User);
+    const existingFavorites = localStorage.getItem(
+        `${StorageKeys.Favorites}_${user}`
+    );
+    if (!existingFavorites) return [];
+    console.log("existingFavorites", existingFavorites);
+    return JSON.parse(existingFavorites);
+}
+const data = GetFavorites();
 const initialState: City = {
     favorites: data,
+
     active: null,
 };
 
@@ -24,7 +35,7 @@ const citySlice = createSlice({
             const cityName = action.payload;
             if (!state.favorites.includes(cityName)) {
                 state.favorites.push(cityName);
-                SetFavorites(cityName);
+                // SetFavorites(cityName);
             }
         },
         removeFavorite: (state, action) => {
@@ -32,7 +43,7 @@ const citySlice = createSlice({
             state.favorites = state.favorites.filter((city) => {
                 return city !== cityName;
             });
-            RemoveFavorites(cityName);
+            // RemoveFavorites(cityName);
         },
         setActive: (state, action) => {
             if (!state.active) state.active = state.favorites[0];

@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { toast } from "react-hot-toast";
+import { useMutation } from "react-query";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { login } from "../../store/features/user/userSlice";
-import { useMutation } from "react-query";
 
 const mimicFetchDataFromBackend = async () => {
     return new Promise((resolve) => {
@@ -12,6 +12,7 @@ const mimicFetchDataFromBackend = async () => {
         }, 1000);
     });
 };
+
 const Login = () => {
     const [error, setError] = useState("");
     const [credentials, setCredentials] = useState({
@@ -26,9 +27,7 @@ const Login = () => {
                     password: credentials.password,
                 })
             );
-            console.log(data);
 
-            toast.success("Zalogowano");
             navigate("/dashboard");
         },
     });
