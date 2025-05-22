@@ -1,32 +1,32 @@
-import React from "react";
-import { useDispatch } from "react-redux";
-import { removeFavorite, setActive } from "store/features/city/citySlice";
-import { useDailyForecast } from "../hooks/getDailyForecast";
-import { useAppSelector } from "store/hooks";
+import React from "react"
+import { useDispatch } from "react-redux"
+import { removeFavorite, setActive } from "store/features/city/citySlice"
+import { useDailyForecast } from "../hooks/getDailyForecast"
+import { useAppSelector } from "store/hooks"
 type Props = {
-  handleRemoveFavorite: (cityName: string) => void;
-  cityName: string;
-  handleActive: (cityName: string) => void;
-};
+  handleRemoveFavorite: (cityName: string) => void
+  cityName: string
+  handleActive: (cityName: string) => void
+}
 
 const WeatherCard: React.FC<Props> = ({
   cityName,
   handleRemoveFavorite,
   handleActive,
 }) => {
-  const { data: CityData, isLoading } = useDailyForecast(cityName);
-  const dispatch = useDispatch();
-  const active= useAppSelector((state)=>state.rootReducer.city.active)
-  if (!CityData) return null;
+  const { data: CityData, isLoading } = useDailyForecast(cityName)
+  const dispatch = useDispatch()
+  const active = useAppSelector((state) => state.city.active)
+  if (!CityData) return null
 
-  const { weather } = CityData;
-  const weatherDescription = weather[0].description;
-  const iconCode = weather[0].icon;
-  const iconUrl = `${process.env.REACT_APP_BASE_ICON_URL}${iconCode}.png`;
+  const { weather } = CityData
+  const weatherDescription = weather[0].description
+  const iconCode = weather[0].icon
+  const iconUrl = `${process.env.REACT_APP_BASE_ICON_URL}${iconCode}.png`
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <div>Loading...</div>
   }
- 
+
   return (
     <div
       className={
@@ -40,19 +40,19 @@ const WeatherCard: React.FC<Props> = ({
         minWidth: "120px",
         maxWidth: "125px",
       }}
-      role="button"
+      role='button'
       onClick={() => {
-        dispatch(setActive(cityName));
-        handleActive(cityName);
+        dispatch(setActive(cityName))
+        handleActive(cityName)
       }}
     >
       <button
         onClick={(e) => {
-          e.stopPropagation();
-          handleRemoveFavorite(cityName);
-          dispatch(removeFavorite(cityName));
+          e.stopPropagation()
+          handleRemoveFavorite(cityName)
+          dispatch(removeFavorite(cityName))
         }}
-        className="btn btn-danger btn-sm rounded-lg position-absolute"
+        className='btn btn-danger btn-sm rounded-lg position-absolute'
         style={{
           top: "5px",
           right: "5px",
@@ -65,17 +65,21 @@ const WeatherCard: React.FC<Props> = ({
       <img
         src={iconUrl}
         style={{ height: "64px", width: "84px" }}
-        alt="Weather Icon"
+        alt='Weather Icon'
       />
-      <div className="card-body">
-        <h5 className="card-title">{CityData.name}</h5>
-        <small className="card-text">{CityData.sys.country}</small>
+      <div className='card-body'>
+        <h5 className='card-title'>
+          {CityData.name.length < 20
+            ? CityData.name
+            : CityData.name.slice(0, 20) + "..."}
+        </h5>
+        <small className='card-text'>{CityData.sys.country}</small>
         <p>
-          <small className="card-text">{weatherDescription}</small>
+          <small className='card-text'>{weatherDescription}</small>
         </p>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default WeatherCard;
+export default WeatherCard

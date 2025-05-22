@@ -28,6 +28,33 @@
   color: #61dafb;
 }
 
+.formCheckbox {
+  position: relative;
+  padding-left: 2.25rem;
+  margin-bottom: 1rem;
+}
+
+.checkbox {
+  position: absolute;
+  transform: scale(1.5);
+  top: 0.2rem;
+  left: 0;
+}
+
+.checkboxLabel {
+  font-weight: 500;
+}
+
+.card-elevated {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  background-color: rgba(0, 0, 0, -0.1);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
+  padding: 1rem;
+  margin: 0 0.5rem;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
